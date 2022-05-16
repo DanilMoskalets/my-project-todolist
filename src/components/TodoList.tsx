@@ -1,17 +1,20 @@
 import React, {FC} from 'react';
-import {filterValueType, taskStateType, tasksType, todoListType} from "../App";
+import {filterValueType, tasksType} from "../App";
 import Task from "./Task";
 import {AddItemForm} from "./AddItemForm";
+import {EditableForm} from "./EditableForm";
 
 type TodoListPropsType = {
     tasks: tasksType[]
     title: string
+    editTodoListTitle: (text: string, todoListID: string) => void
     id: string
     addTask:(text: string, todoListID: string) => void
     removeTask: (tID: string,id: string) => void
     editTask: (newTitle: string, taskId: string, todoListID: string) => void
     changeTaskStatus: (isDone: boolean, taskID: string, todoListID: string) => void
     filter: filterValueType
+    changeFilter: (filter: filterValueType, todoListID: string) => void
 }
 
 const TodoList: FC<TodoListPropsType> = ({
@@ -22,8 +25,14 @@ const TodoList: FC<TodoListPropsType> = ({
                                              changeTaskStatus,
                                              title,
                                              addTask,
+                                             changeFilter,
+                                             editTodoListTitle,
                                              ...props
                                          }) => {
+
+    const handleEditTodoListTitle = (newTitle: string) => {
+        editTodoListTitle(newTitle, id)
+    }
 
     const handleAddTask = (text: string) => {
         addTask(text, id )
@@ -41,13 +50,13 @@ const TodoList: FC<TodoListPropsType> = ({
         changeTaskStatus(isDone, tId, id)
     }
 
-    const handleFilter = (filterValue: string) => {
-
+    const handleFilter = (filterValue: filterValueType) => {
+        changeFilter(filterValue, id)
     }
 
     return (
         <div>
-            <h4>{title}</h4>
+            <EditableForm  editTask={handleEditTodoListTitle} title={title}/>
             <AddItemForm addItem={handleAddTask}/>
             {
                 tasks.map((t) => (

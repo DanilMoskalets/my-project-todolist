@@ -1,9 +1,8 @@
-import React, {ChangeEvent, FormEvent, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import TodoList from './components/TodoList';
 import {AddItemForm} from "./components/AddItemForm";
 import {v1} from 'uuid';
-import todoList from "./components/TodoList";
 import { Paper,Container,Grid } from '@mui/material';
 
 
@@ -36,16 +35,16 @@ const App = () => {
     ])
     const [tasks, setTasks] = useState<taskStateType>({
         [todoListID_1]: [
-            {text: 'REACT', id: v1(), isDone: true},
-            {text: 'REACTTTTTTT', id: v1(), isDone: true}
+            {text: 'REACT', id: v1(), isDone: false},
+            {text: 'REACTTTTTTT', id: v1(), isDone: false}
         ],
         [todoListID_2]: [
-            {text: 'JS', id: v1(), isDone: true},
+            {text: 'JS', id: v1(), isDone: false},
             {text: 'JSSSSS', id: v1(), isDone: true}
         ],
         [todoListID_3]: [
-            {text: 'VUE', id: v1(), isDone: true},
-            {text: 'VUEEEEEE', id: v1(), isDone: true}
+            {text: 'VUE', id: v1(), isDone: false},
+            {text: 'VUEEEEEE', id: v1(), isDone: false}
         ]
     })
 
@@ -55,6 +54,17 @@ const App = () => {
         const newTodoList: todoListType = {id: newTodoListId, title, filter: 'all'}
         setTodoList([...todoList, newTodoList])
         setTasks({...tasks, [newTodoListId]: []})
+    }
+
+    useEffect(() => {
+        console.log(tasks[todoListID_1])
+    });
+
+    const editTodoListTitle = (title: string, todoListID: string) => {
+        const updateTodoListFilter = todoList.map(tl => tl.id === todoListID
+            ? {...tl, title} : tl
+        )
+        setTodoList(updateTodoListFilter)
     }
 
 
@@ -84,6 +94,13 @@ const App = () => {
         })
     }
 
+    const changeFilterTasks = (filter: filterValueType, todoListID: string) => {
+        const updateTodoListFilter = todoList.map(tl => tl.id === todoListID
+        ? {...tl, filter} : tl
+        )
+        setTodoList(updateTodoListFilter)
+    }
+
     const changeTaskStatus = (isDone: boolean, taskID: string, todoListID: string) => {
         setTasks({
             ...tasks,
@@ -92,7 +109,6 @@ const App = () => {
                 isDone
             } : t)
         })
-        console.log(tasks[todoListID_1])
     }
 
 
@@ -122,12 +138,14 @@ const todoListMap = todoList.map(tl => {
         <TodoList
             id={tl.id}
             title={tl.title}
+            editTodoListTitle={editTodoListTitle}
             tasks={tasksForRender}
             addTask={addTask}
             removeTask={removeTask}
             editTask={editTask}
             changeTaskStatus={changeTaskStatus}
             filter={tl.filter}
+            changeFilter = {changeFilterTasks}
         />
         </Paper>
         </Grid>

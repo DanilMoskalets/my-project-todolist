@@ -1,5 +1,5 @@
-import React, {ChangeEvent, FC, useState} from 'react';
-import {tasksType} from "../App";
+import React, {ChangeEvent} from 'react';
+import {filterValueType, tasksType} from "../App";
 import { EditableForm } from './EditableForm';
 
 type TaskTypeProps = {
@@ -21,8 +21,9 @@ const Task = (props: TaskTypeProps) => {
     }
 
     const onChangeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
-        props.changeTaskStatus(e.target.checked, props.task.id)
+        props.changeTaskStatus(e.currentTarget.checked, props.task.id)
     }
+
 
     return (
         <div>
