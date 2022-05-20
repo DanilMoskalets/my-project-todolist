@@ -7,6 +7,7 @@ import {EditableForm} from "./EditableForm";
 type TodoListPropsType = {
     tasks: tasksType[]
     title: string
+    removeTodoList: (todoListID: string) => void
     editTodoListTitle: (text: string, todoListID: string) => void
     id: string
     addTask:(text: string, todoListID: string) => void
@@ -27,6 +28,7 @@ const TodoList: FC<TodoListPropsType> = ({
                                              addTask,
                                              changeFilter,
                                              editTodoListTitle,
+                                             removeTodoList,
                                              ...props
                                          }) => {
 
@@ -55,7 +57,10 @@ const TodoList: FC<TodoListPropsType> = ({
     }
 
     return (
+
         <div>
+            <span onClick={() => {removeTodoList(id)}}>X</span>
+
             <EditableForm  editTask={handleEditTodoListTitle} title={title}/>
             <AddItemForm addItem={handleAddTask}/>
             {

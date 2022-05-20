@@ -48,17 +48,17 @@ const App = () => {
         ]
     })
 
+    useEffect(() => {
+        console.log(tasks[todoListID_1])
+    });
 
+// TodoList
     const addTodoList = (title: string) => {
         const newTodoListId = v1()
         const newTodoList: todoListType = {id: newTodoListId, title, filter: 'all'}
         setTodoList([...todoList, newTodoList])
         setTasks({...tasks, [newTodoListId]: []})
     }
-
-    useEffect(() => {
-        console.log(tasks[todoListID_1])
-    });
 
     const editTodoListTitle = (title: string, todoListID: string) => {
         const updateTodoListFilter = todoList.map(tl => tl.id === todoListID
@@ -67,14 +67,26 @@ const App = () => {
         setTodoList(updateTodoListFilter)
     }
 
+    const removeTodoList = (todoListID: string) => {
+        setTodoList(todoList.filter( tl =>  tl.id !== todoListID))
+        delete tasks[todoListID]
+    }
 
-
+    const filteredTodoList = (todoList: todoListType) => {
+        switch (todoList.filter) {
+            case "active":
+                return tasks[todoList.id].filter(t => !t.isDone)
+            case "completed":
+                return tasks[todoList.id].filter(t => t.isDone)
+            default:
+                return tasks[todoList.id]
+        }
+    }
+// Task
     const addTask = (text: string, todoListID: string) => {
       const newTask: tasksType = {id: v1(), text, isDone: false}
         setTasks({...tasks, [todoListID]: [newTask, ...tasks[todoListID]]})
     }
-
-
 
     const removeTask = (taskID: string,todoListId: string) => {
         setTasks({
@@ -112,23 +124,6 @@ const App = () => {
     }
 
 
-// const changeFilter = (filter: filterValueType, tID: string) => {
-//     const newTodoListFilter = tasks.map(tl => tl.id === )
-// }
-
-const filteredTodoList = (todoList: todoListType) => {
-    switch (todoList.filter) {
-        case "active":
-            return tasks[todoList.id].filter(t => !t.isDone)
-        case "completed":
-            return tasks[todoList.id].filter(t => t.isDone)
-        default:
-            return tasks[todoList.id]
-    }
-}
-
-
-
 const todoListMap = todoList.map(tl => {
     const tasksForRender = filteredTodoList(tl)
 
@@ -138,6 +133,7 @@ const todoListMap = todoList.map(tl => {
         <TodoList
             id={tl.id}
             title={tl.title}
+            removeTodoList={removeTodoList}
             editTodoListTitle={editTodoListTitle}
             tasks={tasksForRender}
             addTask={addTask}
@@ -168,14 +164,3 @@ return (
 }
 
 export default App;
-// const addTask = (title: string, todoListID: string) => {
-//     const newTask = {text: title, id: v1(), isDone: false}
-//     setTasks({[todoListID]: [...tasks[todoListID], newTask]})
-// }
-
-
-// const addTask = (text: string, todoListID: string) => {
-//     const newTask: tasksType = {id: v1(), text, isDone: false}
-//
-//     setTasks({...tasks, [todoListID]: [newTask, ...tasks[todoListID]]})
-// }
