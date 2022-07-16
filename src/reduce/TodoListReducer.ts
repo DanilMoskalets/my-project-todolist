@@ -1,4 +1,3 @@
-import TodoList from "../components/TodoList";
 import {todoListType} from "../App";
 import {v1} from "uuid";
 
