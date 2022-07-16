@@ -4,6 +4,7 @@ import TodoList from './components/TodoList';
 import {AddItemForm} from "./components/AddItemForm";
 import {v1} from 'uuid';
 import { Paper,Container,Grid } from '@mui/material';
+import todoListApi from "./api/todo-list-api";
 
 
 export type tasksType = {
@@ -28,6 +29,7 @@ const App = () => {
     const todoListID_2 = v1()
     const todoListID_3 = v1()
 
+    const [valueApi, setValueApi] = useState<any>(null)
     const [todoList, setTodoList] = useState<todoListType[]>([
         {id: todoListID_1, title: 'Первый', filter: 'all'},
         {id: todoListID_2, title: 'Второй', filter: 'all'},
@@ -48,9 +50,8 @@ const App = () => {
         ]
     })
 
-    useEffect(() => {
-        console.log(tasks[todoListID_1])
-    });
+
+
 
 // TodoList
     const addTodoList = (title: string) => {
@@ -129,6 +130,7 @@ const todoListMap = todoList.map(tl => {
 
     return (
         <Grid item  style={{ padding: '20px', marginTop: '60px' }} key={tl.id}>
+
         <Paper elevation={8} className={'todoList'}  style={{padding: '10px'}}>
         <TodoList
             id={tl.id}
@@ -149,8 +151,22 @@ const todoListMap = todoList.map(tl => {
             )
 })
 
+    const changePostTodoListAPI = () => {
+        todoListApi.postTodoList()
+            .then(res =>res.data)
+    }
+
+    useEffect(() => {
+        todoListApi.getTodoList()
+            .then(res =>  JSON.stringify(res.data))
+            .then(data => setValueApi(data))
+    }, [])
+
+    console.log(valueApi)
+
 return (
     <div className="App">
+        <button onClick={() => changePostTodoListAPI()}>Click</button>
         <Container fixed>
             <Grid container style={{padding: '20px', }} >
                 <AddItemForm addItem={addTodoList}/>
