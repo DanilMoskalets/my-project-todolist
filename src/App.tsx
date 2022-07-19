@@ -152,21 +152,28 @@ const todoListMap = todoList.map(tl => {
 })
 
     const changePostTodoListAPI = () => {
-        todoListApi.postTodoList()
-            .then(res =>res.data)
+        console.log(valueApi)
+        todoListApi.getTodoList()
+            .then(res => {
+                console.log(res.data)
+                return res.data
+            })
+            .then((data) => {
+                setValueApi(data)
+            })
     }
 
-    useEffect(() => {
-        todoListApi.getTodoList()
-            .then(res =>  JSON.stringify(res.data))
-            .then(data => setValueApi(data))
-    }, [])
+    const changeDeletedTodoListAPI = () => {
+      todoListApi.deleteTodoList()
+        console.log(valueApi)
+    }
 
-    console.log(valueApi)
+
 
 return (
     <div className="App">
-        <button onClick={() => changePostTodoListAPI()}>Click</button>
+        <button onClick={() => changePostTodoListAPI()}>Get</button>
+        <button onClick={() => changeDeletedTodoListAPI()} >Delete</button>
         <Container fixed>
             <Grid container style={{padding: '20px', }} >
                 <AddItemForm addItem={addTodoList}/>
