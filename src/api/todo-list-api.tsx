@@ -8,24 +8,38 @@ const settings = {
     }
 }
 
-const todoListApi = {
+export const todoListApi = {
     getTodoList() {
-        const promise = axios.get('https://social-network.samuraijs.com/api/1.1/todo-lists', settings)
+        const promise = axios.get(
+            'https://social-network.samuraijs.com/api/1.1/todo-lists',
+            settings)
 
         return promise
     },
 
-    postTodoList() {
-        const prosime = axios.post('https://social-network.samuraijs.com/api/1.1/todo-lists', {title: 'Bla'}, settings)
+    postTodoList(title: string) {
+        const prosime = axios.post(
+            'https://social-network.samuraijs.com/api/1.1/todo-lists',
+            {title},
+            settings)
         return prosime
     },
 
-    deleteTodoList() {
-        const prosime = axios.post('https://social-network.samuraijs.com/api/1.1/todo-lists/10967305-39c2-4a8e-af6c-935cb3fe5eb7', settings)
+    deleteTodoList(todoListID: string) {
+        const prosime = axios.post(
+            `https://social-network.samuraijs.com/api/1.1/todo-lists/${todoListID}`,
+            settings)
         return prosime
-    }
+    },
+
+    updateTodoList(title: string, todoListID: string) {
+        const prosime =
+            axios
+                .post(
+                    `https://social-network.samuraijs.com/api/1.1/todo-lists${todoListID}`,
+                    {title},
+                    settings)
+        return prosime
+    },
 
 }
-
-
-export default todoListApi

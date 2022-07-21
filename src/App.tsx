@@ -4,6 +4,7 @@ import TodoList from './components/TodoList';
 import {AddItemForm} from "./components/AddItemForm";
 import {v1} from 'uuid';
 import { Paper,Container,Grid } from '@mui/material';
+import {todoListApi} from "./api/todo-list-api";
 
 
 export type tasksType = {
@@ -48,9 +49,7 @@ const App = () => {
         ]
     })
 
-    useEffect(() => {
-        console.log(tasks[todoListID_1])
-    });
+
 
 // TodoList
     const addTodoList = (title: string) => {
@@ -148,10 +147,36 @@ const todoListMap = todoList.map(tl => {
 
             )
 })
+    const [valueApi, setValueApi] = useState<any>(null)
+
+    const handleGetTodoList = () => {
+        todoListApi.getTodoList()
+            .then(res => {
+                return JSON.stringify(res.data)
+            })
+            .then(data => setValueApi(data.length))
+        console.log(valueApi)
+    }
+    const handlePostTodoList = () => {
+        todoListApi.postTodoList('2')
+            .then(res => setValueApi(res.data))
+        console.log(valueApi)
+    }
+    const handleDeleteTodoList = () => {
+
+    }
+    const handleUpdateTodoList = () => {
+
+    }
+
 
 return (
     <div className="App">
         <Container fixed>
+            <button onClick={handleGetTodoList}>Get</button>
+            <button onClick={handlePostTodoList}>Post</button>
+            <button onClick={handleDeleteTodoList}>Del</button>
+            <button onClick={handleUpdateTodoList}>Upd</button>
             <Grid container style={{padding: '20px', }} >
                 <AddItemForm addItem={addTodoList}/>
             </Grid>
